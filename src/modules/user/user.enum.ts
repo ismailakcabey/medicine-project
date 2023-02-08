@@ -1,0 +1,7 @@
+export enum Role{
+    ADMIN_DEVELOPER=0,
+    ADMIN_ADMIN=1,
+    ADMIN_MANAGER=2,
+    ADMIN_CUSTOMER=3,
+}
+
