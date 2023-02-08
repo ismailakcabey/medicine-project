@@ -13,6 +13,9 @@ import { filter } from "rxjs";
 import { UserDto } from "./user.dto";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
+import { ApiTags } from "@nestjs/swagger";
+
+@ApiTags('User')
 @Controller('users')
 export class UsersController{
     constructor(

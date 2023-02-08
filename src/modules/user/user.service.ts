@@ -79,6 +79,12 @@ export class UserService {
         const phoneControlUser = await this.user.findOne({phoneNumber: update?.phoneNumber})
         const identitiyControlUser = await this.user.findOne({phoneNumber: update?.identityId})
         update.updatedDate = Date.now()
+        if(update.id){
+            return {
+                status: false,
+                message:"id is not updated",
+            }
+        }
         if(phoneControlUser){
             return {
                 status: false,
