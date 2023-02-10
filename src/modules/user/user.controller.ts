@@ -54,6 +54,14 @@ export class UsersController{
         return user
     }
 
+    @Get('/verify/:id')
+    async verifyUserById(
+        @Param('id') id : string
+    ){
+        const user = await this.usersService.verifyUserById(id)
+        return user
+    }
+
     @Delete(':id')
     async delUsersById(
         @Param('id') id : string
