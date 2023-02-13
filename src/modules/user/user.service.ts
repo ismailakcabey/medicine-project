@@ -4,9 +4,12 @@ import { Model } from "mongoose";
 import { UserDto } from "./user.dto";
 import { Role } from "./user.enum";
 import { User } from "./user.model";
+import {JwtService} from "@nestjs/jwt";
 const sgMail = require('@sendgrid/mail')
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config()
+const passwordHash = require('password-hash');
+
 @Injectable()
 export class UserService {
     constructor(
@@ -36,6 +39,7 @@ export class UserService {
                 message:"this user is already identitiy id"
             }
         }
+        addUser.password = passwordHash.generate(addUser?.password)
         const result = await addUser.save()
         console.log("kullanıcı oluşturuldu")
         let email = await this.sendUserVerifyMail(result?.id as string,addUser)
@@ -52,8 +56,6 @@ export class UserService {
         data: User[],
         count: number
     }>{
-        console.log(userDto)
-        console.log("DENEME")
         const users = await this.user.find(userDto).limit(userDto?.limit)
         const usersCount = await this.user.count(userDto)
         return {
@@ -75,6 +77,19 @@ export class UserService {
             data: users,
         }
     }
+
+    async getEmailUser(email):Promise<{
+      status: boolean,
+      data: User,
+      message: string
+  }>{
+      const users = await this.user.findOne({ mail: email})
+      return {
+          status: true,
+          message:"success",
+          data: users,
+      }
+  }
 
     async updateUserById(id , update):Promise<{
         status: boolean,

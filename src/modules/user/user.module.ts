@@ -5,6 +5,7 @@ import { UsersController } from "./user.controller";
 import { UserSchema } from "./user.model";
 import { UserService } from "./user.service";
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
     imports: [
@@ -19,6 +20,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
            }),
            inject: [ConfigService],
          }),
+         JwtModule.register({
+          secret: 'secret',
+          signOptions: {expiresIn: '1d'}
+      })
     ],
     controllers: [UsersController],
     providers: [UserService]

@@ -63,6 +63,13 @@ export class UserDto {
     @IsString()
     fullName: string
 
+    //kullanıcı şifre
+    @ApiProperty({
+        nullable: false,
+    })
+    @IsString()
+    password: string
+
     //doğum tarihi
     @ApiProperty({
         nullable: false,
