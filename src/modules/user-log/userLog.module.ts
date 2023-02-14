@@ -3,10 +3,13 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from "@nestjs/jwt";
 import { UserRequestSchema } from "./userLog.model";
+import { UserModule } from "../user/user.module";
+import { UserService } from "../user/user.service";
+import { UserRequestService } from "./userLog.service";
 
 @Module({
     imports: [
-        MongooseModule.forFeature([{name:"MedicineUserRequestSchema",schema:UserRequestSchema}]),
+        MongooseModule.forFeature([{name:"MedicineUserRequest",schema:UserRequestSchema}]),
         ConfigModule.forRoot({
             isGlobal: true,
           }),
@@ -20,10 +23,15 @@ import { UserRequestSchema } from "./userLog.model";
          JwtModule.register({
           secret: 'secret',
           signOptions: {expiresIn: '1d'}
-      })
+      }),
     ],
     controllers:[],
-    providers: []
+    providers: [
+      UserRequestService
+    ],
+    exports: [
+      UserRequestService
+    ]
 })
 
 export class UserLogModule{ }

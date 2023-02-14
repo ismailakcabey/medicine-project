@@ -12,24 +12,20 @@ export const UserRequestSchema = new mongoose.Schema({
         required: false,
         default: new Date,
     },
-    createdById:{
-        type: mongoose.Types.ObjectId,
-        required: false,
-    },
     body:{
-        type:Object,
+        type:String,
         required: false,
     },
     cookies:{
-        type:Object,
+        type:String,
         required: false,
     },
     query:{
-        type:Object,
+        type:String,
         required: false,
     },
     params:{
-        type:Object,
+        type:String,
         required: false,
     },
     method:{
@@ -42,10 +38,9 @@ export interface UserReq extends mongoose.Document{
     id:string,
     deleted:boolean,
     createdDate:Date,
-    createdById:mongoose.Schema.Types.ObjectId,
-    body:object,
-    cookies:object,
-    query:object,
-    params:object,
+    body:string,
+    cookies:string,
+    query:string,
+    params:string,
     method:string,
 }

@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Injectable, Module } from "@nestjs/common";
 import { UserDto } from "./user.dto";
 import { MongooseModule } from "@nestjs/mongoose";
 import { UsersController } from "./user.controller";
@@ -6,6 +6,8 @@ import { UserSchema } from "./user.model";
 import { UserService } from "./user.service";
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from "@nestjs/jwt";
+import { UserRequestService } from "../user-log/userLog.service";
+import { UserLogModule } from "../user-log/userLog.module";
 
 @Module({
     imports: [
@@ -23,10 +25,15 @@ import { JwtModule } from "@nestjs/jwt";
          JwtModule.register({
           secret: 'secret',
           signOptions: {expiresIn: '1d'}
-      })
+      }),
+      UserLogModule
     ],
     controllers: [UsersController],
-    providers: [UserService]
+    providers: [UserService,
+    ]
 })
 
-export class UserModule{ }
+
+export class UserModule{ 
+
+}

@@ -120,7 +120,8 @@ export class UserDto {
     // güncelleyen kişi
     @ApiProperty({
         nullable: true,
-        default:""
+        default:"",
+        required:false
     })
     @IsObjectId()
     updatedById: string

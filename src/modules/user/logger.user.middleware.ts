@@ -1,15 +1,30 @@
 import { NestMiddleware , Injectable } from "@nestjs/common";
 import { Request , Response } from "express";
+import { UserRequestService } from "../user-log/userLog.service";
+import * as moment from 'moment';
+import { format } from 'date-fns';
+import { UserDto } from "./user.dto";
 
 @Injectable()
 export class LoggerUserMiddleware implements NestMiddleware{
+    constructor(
+        private userRequestService: UserRequestService
+        
+    ){}
     use(req:Request , res:Response , next: ()=>void){
-        console.log('Request geldi :')
-        console.log('JWT : ' + JSON.stringify(req.cookies?.jwt))
-        console.log('Method :' + JSON.stringify(req.method))
-        console.log('Param :' + JSON.stringify(req.params))
-        console.log('query  :' + JSON.stringify(req.query))
-        console.log('body  :' + JSON.stringify(req.body))
+
+        const request = {
+            cookies: JSON.stringify(req.cookies),
+            params: JSON.stringify(req.params),
+            query: JSON.stringify(req.query),
+            body: JSON.stringify(req.body),
+            method: req.method,
+            deleted: false,
+            createdDate: new Date
+            
+        }
+        const newReq = new UserDto()
+        const result = this.userRequestService.insertRequest(request)
         next()
     }
 }

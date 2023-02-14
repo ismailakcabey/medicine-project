@@ -7,9 +7,11 @@ import { ConfigModule } from '@nestjs/config';
 import {JwtModule} from "@nestjs/jwt";
 import { LoggerUserMiddleware } from './modules/user/logger.user.middleware';
 import { UsersController } from './modules/user/user.controller';
+import { UserLogModule } from './modules/user-log/userLog.module'
 @Module({
   imports: [
     UserModule,
+    UserLogModule,
     ConfigModule.forRoot(),
     JwtModule.register({
       secret: 'secret',
