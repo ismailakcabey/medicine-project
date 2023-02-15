@@ -16,6 +16,7 @@ export class UserLogDto{
 
     @ApiProperty({
         nullable: false,
+        required:false
     })
     @IsString()
       id?: string;
@@ -24,7 +25,8 @@ export class UserLogDto{
     @ApiProperty({
         nullable: false,
         example:false,
-        default:false
+        default:false,
+        required:false
     })
     @IsBoolean()
     deleted: boolean
@@ -32,7 +34,8 @@ export class UserLogDto{
     // oluşturulma tarihi
     @ApiProperty({
         nullable: false,
-        default: Date.now()
+        default: Date.now(),
+        required:false
     })
     @IsDate()
     createdDate: Date
@@ -40,49 +43,56 @@ export class UserLogDto{
 
     @ApiProperty({
         nullable: false,
-        default: ''
+        default: '',
+        required:false
     })
     @IsObject()
     body: Object
 
     @ApiProperty({
         nullable: false,
-        default: ''
+        default: '',
+        required:false
     })
     @IsString()
     cookies: String
 
     @ApiProperty({
         nullable: false,
-        default: ''
+        default: '',
+        required:false
     })
     @IsObject()
     query: Object
 
     @ApiProperty({
         nullable: false,
-        default: ''
+        default: '',
+        required:false
     })
     @IsObject()
     params: Object
 
     @ApiProperty({
         nullable: false,
-        default: ''
+        default: '',
+        required:false
     })
     @IsString()
     method: String
 
     @ApiProperty({
         nullable: false,
-        default: ''
+        default: '',
+        required:false
     })
     @IsString()
     ip: String
 
     @ApiProperty({
         nullable: false,
-        default: ''
+        default: '',
+        required:false
     })
     @IsString()
     url: String

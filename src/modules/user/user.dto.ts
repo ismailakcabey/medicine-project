@@ -16,6 +16,7 @@ export class UserDto {
 
     @ApiProperty({
         nullable: false,
+        required:false
     })
     @IsString()
       id?: string;
@@ -25,7 +26,8 @@ export class UserDto {
         nullable: false,
         enum: Role,
         example:0,
-        default:3
+        default:3,
+        required:false
     })
     @IsEnum(Role)
     status: Role;
@@ -35,7 +37,8 @@ export class UserDto {
     @ApiProperty({
         nullable: false,
         example:false,
-        default:false
+        default:false,
+        required:false
     })
     @IsBoolean()
     deleted: boolean
@@ -43,6 +46,7 @@ export class UserDto {
     // oluşturulma tarihi
     @ApiProperty({
         nullable: false,
+        required:false,
         default: Date.now()
     })
     @IsDate()
@@ -51,7 +55,8 @@ export class UserDto {
     // güncellenme tarihi
     @ApiProperty({
         nullable: false,
-        default: Date.now()
+        default: Date.now(),
+        required:false
     })
     @IsDate()
     updatedDate: Date
@@ -59,6 +64,7 @@ export class UserDto {
     //kullanıcı ismi
     @ApiProperty({
         nullable: false,
+        required:false
     })
     @IsString()
     fullName: string
@@ -66,6 +72,7 @@ export class UserDto {
     //kullanıcı şifre
     @ApiProperty({
         nullable: false,
+        required:false
     })
     @IsString()
     password: string
@@ -73,6 +80,7 @@ export class UserDto {
     //doğum tarihi
     @ApiProperty({
         nullable: false,
+        required:false
     })
     @IsDate()
     birthDayDate: Date
@@ -80,7 +88,8 @@ export class UserDto {
     //mail
     @ApiProperty({
         nullable: false,
-        uniqueItems:true
+        uniqueItems:true,
+        required:false
     })
     @IsString()
     mail: string
@@ -88,6 +97,7 @@ export class UserDto {
     //telefon
     @ApiProperty({
         nullable: false,
+        required:false
     })
     @IsString()
     phoneNumber: string
@@ -96,7 +106,8 @@ export class UserDto {
     @ApiProperty({
         nullable: false,
         example:false,
-        default:false
+        default:false,
+        required:false
     })
     @IsBoolean()
     isMail: boolean
@@ -104,7 +115,8 @@ export class UserDto {
     // eczane
     @ApiProperty({
         nullable: true,
-        default:""
+        default:"",
+        required:false
     })
     @IsObjectId()
     pharmcyId: string
@@ -112,7 +124,8 @@ export class UserDto {
     // oluşturan kişi
     @ApiProperty({
         nullable: true,
-        default:""
+        default:"",
+        required:false
     })
     @IsObjectId()
     createdById: string
@@ -121,7 +134,8 @@ export class UserDto {
     @ApiProperty({
         nullable: true,
         default:"",
-        required:false
+        required:false,
+        
     })
     @IsObjectId()
     updatedById: string
@@ -129,6 +143,7 @@ export class UserDto {
     // adres
     @ApiProperty({
         nullable: false,
+        required:false
     })
     @IsString()
     adress: string
@@ -136,7 +151,8 @@ export class UserDto {
     // kimlik bilgisi
     @ApiProperty({
         nullable: false,
-        uniqueItems:true
+        uniqueItems:true,
+        required:false
     })
     @IsString()
     identityId: string

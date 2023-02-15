@@ -16,7 +16,8 @@ export class UserTokenDto{
     @ApiProperty({
         nullable: false,
         example:false,
-        default:false
+        default:false,
+        required:false
     })
     @IsBoolean()
     deleted: boolean
@@ -24,7 +25,8 @@ export class UserTokenDto{
 
     @ApiProperty({
         nullable: false,
-        default: Date.now()
+        default: Date.now(),
+        required:false
     })
     @IsDate()
     createdDate: Date
@@ -32,14 +34,16 @@ export class UserTokenDto{
 
     @ApiProperty({
         nullable: true,
-        default:""
+        default:"",
+        required:false
     })
     @IsObjectId()
     createdById: string
 
     @ApiProperty({
         nullable: true,
-        default:""
+        default:"",
+        required:false
     })
     @IsObjectId()
     token: string
