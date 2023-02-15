@@ -8,7 +8,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from "@nestjs/jwt";
 import { UserRequestService } from "../user-log/userLog.service";
 import { UserLogModule } from "../user-log/userLog.module";
-
+import { UserTokenModule } from "../user-token/userToken.module";
+import { UserTokenService } from "../user-token/userToken.service";
 @Module({
     imports: [
         MongooseModule.forFeature([{name:"MedicineUser",schema:UserSchema}]),
@@ -26,7 +27,8 @@ import { UserLogModule } from "../user-log/userLog.module";
           secret: 'secret',
           signOptions: {expiresIn: '1d'}
       }),
-      UserLogModule
+      UserLogModule,
+      UserTokenModule
     ],
     controllers: [UsersController],
     providers: [UserService,

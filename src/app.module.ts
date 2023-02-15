@@ -8,10 +8,12 @@ import {JwtModule} from "@nestjs/jwt";
 import { LoggerUserMiddleware } from './modules/user/logger.user.middleware';
 import { UsersController } from './modules/user/user.controller';
 import { UserLogModule } from './modules/user-log/userLog.module'
+import { UserTokenModule } from './modules/user-token/userToken.module';
 @Module({
   imports: [
     UserModule,
     UserLogModule,
+    UserTokenModule,
     ConfigModule.forRoot(),
     JwtModule.register({
       secret: 'secret',

@@ -5,6 +5,7 @@ import {
     IsDate,
     IsNumber,
     IsBoolean,
+    IsObject,
 } from 'class-validator'
 import { IsObjectId } from 'class-validator-mongo-object-id'
 import { ObjectId } from 'mongodb'
@@ -41,8 +42,8 @@ export class UserLogDto{
         nullable: false,
         default: ''
     })
-    @IsString()
-    body: String
+    @IsObject()
+    body: Object
 
     @ApiProperty({
         nullable: false,
@@ -55,15 +56,15 @@ export class UserLogDto{
         nullable: false,
         default: ''
     })
-    @IsString()
-    query: String
+    @IsObject()
+    query: Object
 
     @ApiProperty({
         nullable: false,
         default: ''
     })
-    @IsString()
-    params: String
+    @IsObject()
+    params: Object
 
     @ApiProperty({
         nullable: false,
@@ -71,5 +72,19 @@ export class UserLogDto{
     })
     @IsString()
     method: String
+
+    @ApiProperty({
+        nullable: false,
+        default: ''
+    })
+    @IsString()
+    ip: String
+
+    @ApiProperty({
+        nullable: false,
+        default: ''
+    })
+    @IsString()
+    url: String
 
 }

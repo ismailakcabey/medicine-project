@@ -4,24 +4,26 @@ import { UserRequestService } from "../user-log/userLog.service";
 import * as moment from 'moment';
 import { format } from 'date-fns';
 import { UserDto } from "./user.dto";
+import { UserTokenService } from "../user-token/userToken.service";
 
 @Injectable()
 export class LoggerUserMiddleware implements NestMiddleware{
     constructor(
-        private userRequestService: UserRequestService
-        
+        private userRequestService: UserRequestService,
+        private userTokenService: UserTokenService
     ){}
     use(req:Request , res:Response , next: ()=>void){
-
+        
         const request = {
-            cookies: JSON.stringify(req.cookies),
-            params: JSON.stringify(req.params),
-            query: JSON.stringify(req.query),
-            body: JSON.stringify(req.body),
+            cookies: req.cookies['jwt'],
+            params: req.params,
+            query: req.query,
+            body: req.body,
             method: req.method,
             deleted: false,
-            createdDate: new Date
-            
+            createdDate: new Date,
+            ip: req.ip,
+            url: req.url
         }
         const newReq = new UserDto()
         const result = this.userRequestService.insertRequest(request)

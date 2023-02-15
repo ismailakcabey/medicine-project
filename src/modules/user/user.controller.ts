@@ -20,6 +20,7 @@ import { UserService } from "./user.service";
 import { ApiTags } from "@nestjs/swagger";
 import { JwtService } from "@nestjs/jwt";
 import {Response, Request, response} from 'express';
+import { UserTokenService } from "../user-token/userToken.service";
 const passwordHash = require('password-hash');
 
 @ApiTags('User')
@@ -27,7 +28,8 @@ const passwordHash = require('password-hash');
 export class UsersController{
     constructor(
         private readonly usersService:UserService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private readonly userTokenService:UserTokenService
     ){}
 
     @Post()
@@ -130,8 +132,33 @@ export class UsersController{
         if (!passwordHash.verify(password, user.data.password)) {
             throw new BadRequestException('password is not valid');
         }
+        // @ts-ignore
+        const seachUser = await this.userTokenService.getUser(user?.data?.id)
+        if(seachUser){
+            return{
+                status:false,
+                message:"before log out"
+            }
+        }
+        console.log(seachUser)
+        // @ts-ignore
+        console.log(user.data.id)
         const jwt = await this.jwtService.signAsync({id: user.data.id});
+        const searchToken = await this.userTokenService.getToken(jwt)
+        if(searchToken.status){
+            return{
+                status:false,
+                message:"before log out"
+            }
+        }
         response.cookie('jwt', jwt, {httpOnly: true});
+        const token={
+            token:jwt,
+            createdById:user?.data.id,
+            createdDate: new Date,
+            deleted:false
+        }
+        await this.userTokenService.insertToken(token)
         return {
             message: 'success'
         };
@@ -139,9 +166,13 @@ export class UsersController{
 
     @Post('/logout')
     async logout(
-        @Res({passthrough: true}) response: Response
+        @Res({passthrough: true}) response: Response,
+        @Req() request: Request
         ) {
+        const cookie = request.cookies['jwt'];
+        const data = await this.jwtService.verifyAsync(cookie);
         response.clearCookie('jwt');
+        await this.userTokenService.deleteToken(cookie)
 
         return {
             message: 'success'
