@@ -44,7 +44,6 @@ export class UserService {
         }
         addUser.password = passwordHash.generate(addUser?.password)
         const result = await addUser.save()
-        console.log("kullanıcı oluşturuldu")
         let email = await this.sendUserVerifyMail(result?.id as string,addUser)
         return{
             status: true,
@@ -173,8 +172,6 @@ const request = mailjet
         })
 request
     .then((result) => {
-        console.log(result.body)
-        console.log(result.body.Messages[0])
     })
     .catch((err) => {
         console.log(err.statusCode)

@@ -140,9 +140,6 @@ export class UsersController{
                 message:"before log out"
             }
         }
-        console.log(seachUser)
-        // @ts-ignore
-        console.log(user.data.id)
         const jwt = await this.jwtService.signAsync({id: user.data.id});
         const searchToken = await this.userTokenService.getToken(jwt)
         if(searchToken.status){
