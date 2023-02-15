@@ -6,6 +6,9 @@ import { UserRequestSchema } from "./userLog.model";
 import { UserModule } from "../user/user.module";
 import { UserService } from "../user/user.service";
 import { UserRequestService } from "./userLog.service";
+import { ScheduleModule } from '@nestjs/schedule'
+import { UserLogCron } from "./userLog.cron";
+
 
 @Module({
     imports: [
@@ -24,13 +27,16 @@ import { UserRequestService } from "./userLog.service";
           secret: 'secret',
           signOptions: {expiresIn: '1d'}
       }),
+      ScheduleModule.forRoot()
     ],
     controllers:[],
     providers: [
-      UserRequestService
+      UserRequestService,
+      UserLogCron
     ],
     exports: [
-      UserRequestService
+      UserRequestService,
+      UserLogCron
     ]
 })
 

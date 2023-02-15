@@ -26,4 +26,15 @@ export class UserRequestService {
         }
     }
 
+    async deleteReq(){
+        try {
+        const result = await this.userReq.deleteMany({delete:false , method:'GET'})
+        return{
+            status: true
+        }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 }

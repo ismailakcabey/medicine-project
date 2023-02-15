@@ -3,5 +3,6 @@ export enum Role{
     ADMIN_ADMIN=1,
     ADMIN_MANAGER=2,
     ADMIN_CUSTOMER=3,
+    ADMIN_EMPLOOYE=4,
 }
 
