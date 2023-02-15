@@ -10,7 +10,8 @@ Query,
 BadRequestException,
 Res,
 Req,
-UnauthorizedException
+UnauthorizedException,
+UseGuards
 } from "@nestjs/common";
 import { Filter } from "mongodb";
 import { filter } from "rxjs";
@@ -21,10 +22,14 @@ import { ApiTags } from "@nestjs/swagger";
 import { JwtService } from "@nestjs/jwt";
 import {Response, Request, response} from 'express';
 import { UserTokenService } from "../user-token/userToken.service";
+import { RoleGuard } from "./role.guard";
+import { Roles } from "./role.decorator";
+import { Role } from "./user.enum";
 const passwordHash = require('password-hash');
 
 @ApiTags('User')
 @Controller('users')
+@UseGuards(RoleGuard)
 export class UsersController{
     constructor(
         private readonly usersService:UserService,

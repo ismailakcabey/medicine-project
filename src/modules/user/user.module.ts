@@ -10,6 +10,8 @@ import { UserRequestService } from "../user-log/userLog.service";
 import { UserLogModule } from "../user-log/userLog.module";
 import { UserTokenModule } from "../user-token/userToken.module";
 import { UserTokenService } from "../user-token/userToken.service";
+import { RoleGuard } from "./role.guard";
+import { APP_GUARD } from "@nestjs/core";
 @Module({
     imports: [
         MongooseModule.forFeature([{name:"MedicineUser",schema:UserSchema}]),
@@ -32,6 +34,10 @@ import { UserTokenService } from "../user-token/userToken.service";
     ],
     controllers: [UsersController],
     providers: [UserService,
+    {
+      provide: APP_GUARD,
+      useClass:RoleGuard
+    }
     ]
 })
 

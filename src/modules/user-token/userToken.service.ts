@@ -60,12 +60,15 @@ export class UserTokenService{
         }
     }
 
-    async getTokenUser(token : string){
+    async getTokenUser(jwt : string){
         try {
-            const result = await this.userToken.findOne({token: token})
-        return result.id
+            const result = await this.userToken.findOne({token: jwt})
+            if(!result){
+                return "token not found"
+            }
+        return result
         } catch (error) {
-            console.log(error)
+            console.log(error + "ERROR")
         }
     }
 
