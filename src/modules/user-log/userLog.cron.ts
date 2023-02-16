@@ -1,20 +1,16 @@
-import { Injectable , Logger } from "@nestjs/common";
-import { Cron } from "@nestjs/schedule";
-import { UserRequestService } from "./userLog.service";
+import { Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { UserRequestService } from './userLog.service';
+
 @Injectable()
-export class UserLogCron{
+export class UserLogCron {
     constructor(
-        private readonly userLogService: UserRequestService,
-        private readonly logger = new Logger(UserLogCron.name)
+        private userReqService: UserRequestService,
     ){}
-    
-    @Cron('5 * * * * *',{
-        name:'deleteLogObject'
-    })
-    deleteLogCron(){
-        console.log('Log Kayitlari siliniyor')
-        this.userLogService.deleteReq()
-        this.logger.debug("her 5 sn de çalışıyor")
-        return true
-    }
+  @Cron(CronExpression.EVERY_WEEKEND)
+  handleCron() {
+    const result = this.userReqService.deleteReq()
+    console.log('Get method record deleted', result);
+  }
 }
+

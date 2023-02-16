@@ -20,14 +20,22 @@ export class UserService {
     ){}
     
     async insertUser(users: UserDto){
+        try {
         const addUser = new this.user(users);
         const mailControlUser = await this.user.findOne({mail: addUser?.mail})
         const phoneControlUser = await this.user.findOne({phoneNumber: addUser?.phoneNumber})
         const identitiyControlUser = await this.user.findOne({phoneNumber: addUser?.identityId})
+        const createdUser = await this.user.findOne({_id: users?.createdById})
+        if(createdUser?.role == Role.ADMIN_EMPLOOYE){
+            return {
+                status: false,
+                message:"this user is'nt created user"
+            }
+        }
         if(phoneControlUser){
             return {
                 status: false,
-                message:"this user is already phone number"
+                message:"this user is already phone number",
             }
         }
         if(mailControlUser){
@@ -42,6 +50,19 @@ export class UserService {
                 message:"this user is already identitiy id"
             }
         }
+        if(addUser.createdById == null && addUser.role == Role.ADMIN_EMPLOOYE){
+            return {
+                status: false,
+                message:"required create user"
+            }
+        }
+
+        if(addUser.pharmcyId == null && addUser.role == Role.ADMIN_EMPLOOYE){
+            return {
+                status: false,
+                message:"required phamrcy user"
+            }
+        }
         addUser.password = passwordHash.generate(addUser?.password)
         const result = await addUser.save()
         let email = await this.sendUserVerifyMail(result?.id as string,addUser)
@@ -49,6 +70,12 @@ export class UserService {
             status: true,
             message: "user successfully created",
             userId:result?.id as string,
+        }
+        } catch (error) {
+            return{
+                statusbar: false,
+                message: error.message,
+            }
         }
     }
 
@@ -189,5 +216,23 @@ request
             message: "deleted user successfully"
         }
     }
+
+     async getMe(id):Promise<{
+         status: boolean,
+         data: User,
+     }>{
+         try {
+             const user = await this.user.findOne({_id: id})
+         return{
+             status: true,
+             data: user
+         }
+         } catch (error) {
+             return {
+                 status: false,
+                 data: error.data
+             }
+         }
+     }
 
 }

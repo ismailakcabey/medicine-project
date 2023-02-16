@@ -124,7 +124,6 @@ export class UserDto {
     // oluşturan kişi
     @ApiProperty({
         nullable: true,
-        default:"",
         required:false
     })
     @IsObjectId()

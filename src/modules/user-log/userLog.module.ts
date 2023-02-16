@@ -32,11 +32,10 @@ import { UserLogCron } from "./userLog.cron";
     controllers:[],
     providers: [
       UserRequestService,
-      UserLogCron
+      UserLogCron,
     ],
     exports: [
       UserRequestService,
-      UserLogCron
     ]
 })
 

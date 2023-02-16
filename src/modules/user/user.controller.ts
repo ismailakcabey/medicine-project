@@ -81,6 +81,24 @@ export class UsersController{
         }
     }
 
+    @Get('/me/user')
+    async getUserMe(
+        @Req() request: Request
+    ){
+        try {
+        const cookie = request.cookies['jwt'];
+        const data = await this.jwtService.verifyAsync(cookie);
+        const reqUser = await this.userTokenService.getTokenUser(cookie)
+        //@ts-ignore
+        const user = await this.usersService.getMe(reqUser.createdById)
+        return user
+        } catch (error) {
+            return{
+                error:error.message,
+            }
+        }
+    }
+
     @Patch(':id')
     async updateUsersById(
         @Param('id') id : string,
