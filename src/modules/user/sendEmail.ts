@@ -1,7 +1,7 @@
 import { User } from "./user.model";
 
 export function send_verify_email(id: string , user: User){
-    const verifyLink = `http://[::1]:3000/users/verify${id}`
+    const verifyLink = `http://[::1]:3000/users/verify/${id}`
     const VERIFY_HTML = `<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -101,8 +101,7 @@ export function send_verify_email(id: string , user: User){
                 padding-top: 5px;
                 color: #000000;
                 font-family: sans-serif;" class="subheader">
-                    Şifrenizi değiştirmek için aşağıdaki butona tıklayabilirsiniz.
-                     *Bu e-posta şifre değiştirme talebinize istinaden gönderilmiştir.
+                    hesabınızı doğrulayabilirsiniz bu e-posta hesabınızı doğrulayabilmeniz için gönderilmiştir.
             </td>
         </tr>
     

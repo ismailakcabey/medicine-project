@@ -25,6 +25,7 @@ import { UserTokenService } from "../user-token/userToken.service";
 import { RoleGuard } from "./role.guard";
 import { Roles } from "./role.decorator";
 import { Role } from "./user.enum";
+import { send_verify_email } from "./sendEmail";
 const passwordHash = require('password-hash');
 
 @ApiTags('User')
@@ -139,8 +140,10 @@ export class UsersController{
     async verifyUserById(
         @Param('id') id : string
     ){
-        const user = await this.usersService.verifyUserById(id)
-        return user
+        const verify = await this.usersService.verifyUserById(id)
+        const user = await this.usersService.getUserById(id)
+        const verify_html = send_verify_email(id,user.data);
+        return verify_html
     }
 
     @Delete(':id')
