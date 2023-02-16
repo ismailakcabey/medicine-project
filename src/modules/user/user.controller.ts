@@ -81,6 +81,24 @@ export class UsersController{
         }
     }
 
+    @Get('pharmcy/:id')
+    async getUserByPharmcyId(
+        @Param('id') id : string,
+        @Req() request: Request,
+        @Query() userDto: UserDto,
+    ){
+        try {
+            const cookie = request.cookies['jwt'];
+            const data = await this.jwtService.verifyAsync(cookie);
+            const user = await this.usersService.getUserByPharmcyId(id,userDto)
+        return user
+        } catch (error) {
+            return{
+                error:error.message,
+            }
+        }
+    }
+
     @Get('/me/user')
     async getUserMe(
         @Req() request: Request

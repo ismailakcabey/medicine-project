@@ -235,4 +235,28 @@ request
          }
      }
 
+    async getUserByPharmcyId(id , userDto:UserDto):Promise<{
+        status:boolean,
+        data:User[],
+        count:number
+    }>{
+        try {
+            userDto.pharmcyId = id
+            const users = await this.user.find(userDto)
+            const usersCount = await this.user.count({pharmcyId:id})
+            return {
+                status: true,
+                count: usersCount,
+                data: users,
+                
+            }
+        } catch (error) {
+            return {
+                status: false,
+                data: error.data,
+                count: 0
+            }
+        }
+    }
+
 }
