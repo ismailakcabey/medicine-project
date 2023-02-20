@@ -9,11 +9,13 @@ import { LoggerUserMiddleware } from './modules/user/logger.user.middleware';
 import { UsersController } from './modules/user/user.controller';
 import { UserLogModule } from './modules/user-log/userLog.module'
 import { UserTokenModule } from './modules/user-token/userToken.module';
+import { PhamarcyModule } from './modules/phamarcy/phamarcy.module';
 @Module({
   imports: [
     UserModule,
     UserLogModule,
     UserTokenModule,
+    PhamarcyModule,
     ConfigModule.forRoot(),
     JwtModule.register({
       secret: 'secret',

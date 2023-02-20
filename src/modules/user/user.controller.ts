@@ -73,6 +73,9 @@ export class UsersController{
         try {
             const cookie = request.cookies['jwt'];
             const data = await this.jwtService.verifyAsync(cookie);
+            if (!data) {
+                throw new UnauthorizedException();
+            }
             const user = await this.usersService.getUserById(id)
         return user
         } catch (error) {
@@ -91,6 +94,9 @@ export class UsersController{
         try {
             const cookie = request.cookies['jwt'];
             const data = await this.jwtService.verifyAsync(cookie);
+            if (!data) {
+                throw new UnauthorizedException();
+            }
             const user = await this.usersService.getUserByPharmcyId(id,userDto)
         return user
         } catch (error) {
@@ -107,9 +113,10 @@ export class UsersController{
         try {
         const cookie = request.cookies['jwt'];
         const data = await this.jwtService.verifyAsync(cookie);
-        const reqUser = await this.userTokenService.getTokenUser(cookie)
-        //@ts-ignore
-        const user = await this.usersService.getMe(reqUser.createdById)
+        if (!data) {
+            throw new UnauthorizedException();
+        }
+        const user = await this.usersService.getMe(data.id)
         return user
         } catch (error) {
             return{
@@ -127,6 +134,10 @@ export class UsersController{
         try {
             const cookie = request.cookies['jwt'];
         const data = await this.jwtService.verifyAsync(cookie);
+        if (!data) {
+            throw new UnauthorizedException();
+        }
+        update.updatedById = data.id
             const user = await this.usersService.updateUserById(id,update)
         return user
         } catch (error) {
@@ -154,6 +165,9 @@ export class UsersController{
         try {
             const cookie = request.cookies['jwt'];
         const data = await this.jwtService.verifyAsync(cookie);
+        if (!data) {
+            throw new UnauthorizedException();
+        }
             const user = await this.usersService.delUserById(id)
             return user 
         } catch (error) {
@@ -197,6 +211,9 @@ export class UsersController{
         ) {
         const cookie = request.cookies['jwt'];
         const data = await this.jwtService.verifyAsync(cookie);
+        if (!data) {
+            throw new UnauthorizedException();
+        }
         response.clearCookie('jwt');
         await this.userTokenService.deleteToken(cookie)
 
