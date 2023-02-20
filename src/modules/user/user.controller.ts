@@ -176,22 +176,7 @@ export class UsersController{
         if (!passwordHash.verify(password, user.data.password)) {
             throw new BadRequestException('password is not valid');
         }
-        // @ts-ignore
-        const seachUser = await this.userTokenService.getUser(user?.data?.id)
-        if(seachUser){
-            return{
-                status:false,
-                message:"before log out"
-            }
-        }
         const jwt = await this.jwtService.signAsync({id: user.data.id});
-        const searchToken = await this.userTokenService.getToken(jwt)
-        if(searchToken.status){
-            return{
-                status:false,
-                message:"before log out"
-            }
-        }
         response.cookie('jwt', jwt, {httpOnly: true});
         const token={
             token:jwt,

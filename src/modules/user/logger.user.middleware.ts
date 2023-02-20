@@ -10,9 +10,9 @@ import { UserTokenService } from "../user-token/userToken.service";
 export class LoggerUserMiddleware implements NestMiddleware{
     constructor(
         private userRequestService: UserRequestService,
-        private userTokenService: UserTokenService
+        private userTokenService: UserTokenService,
     ){}
-    use(req:Request , res:Response , next: ()=>void){
+    async use(req:Request , res:Response , next: ()=>void){
         
         const request = {
             cookies: req.cookies['jwt'],
@@ -24,6 +24,13 @@ export class LoggerUserMiddleware implements NestMiddleware{
             createdDate: new Date,
             ip: req.ip,
             url: req.url
+        }
+        const token = await this.userTokenService.getToken(request.cookies)
+        if(token === undefined){
+            return{
+                status:false,
+                message:"token is not defined"
+            }
         }
         const newReq = new UserDto()
         const result = this.userRequestService.insertRequest(request)
