@@ -26,6 +26,7 @@ import { RoleGuard } from "./role.guard";
 import { Roles } from "./role.decorator";
 import { Role } from "./user.enum";
 import { send_verify_email } from "./sendEmail";
+import { request } from "http";
 const passwordHash = require('password-hash');
 
 @ApiTags('User')
@@ -181,14 +182,19 @@ export class UsersController{
     async login(
         @Body('mail') mail: string,
         @Body('password') password: string,
-        @Res({passthrough: true}) response: Response
-    ){
+        @Res({passthrough: true}) response: Response,
+        @Req() request: Request
+    ):Promise<{
+        status:boolean,
+        token:string
+    }>{
         const user = await this.usersService.getEmailUser(mail);
-        if (!user) {
-            throw new BadRequestException('user is not defined');
+        console.log(user)
+        if (user.data === null) {
+            throw new UnauthorizedException('user is not defined');
         }
         if (!passwordHash.verify(password, user.data.password)) {
-            throw new BadRequestException('password is not valid');
+            throw new UnauthorizedException('password is not valid');
         }
         const jwt = await this.jwtService.signAsync({id: user.data.id});
         response.cookie('jwt', jwt, {httpOnly: true});
@@ -199,8 +205,10 @@ export class UsersController{
             deleted:false
         }
         await this.userTokenService.insertToken(token)
+        console.log("jwt="+jwt)
         return {
-            message: 'success'
+            status: true,
+            token:"jwt="+jwt
         };
     }
 

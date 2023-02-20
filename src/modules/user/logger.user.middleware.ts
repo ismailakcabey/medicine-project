@@ -27,11 +27,17 @@ export class LoggerUserMiddleware implements NestMiddleware{
             ip: req.ip,
             url: req.url
         }
-        const cookie = request.cookies['jwt'];
-        const data = await this.jwtService.verifyAsync(cookie);
-        if (!data) {
-            throw new UnauthorizedException();
+        const cookie = req.cookies['jwt'];
+        const data = null
+        if(cookie !== undefined){
+            const data = await this.jwtService.verifyAsync(cookie);
         }
+        //@ts-ignore
+        if (!data && !(req.url === '/users/login')) {
+            throw new UnauthorizedException();
+            
+        }
+        console.log(res)
         const result = this.userRequestService.insertRequest(request)
         next()
     }
