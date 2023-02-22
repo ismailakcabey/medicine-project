@@ -35,7 +35,7 @@ export class PhamarcyController{
         @Req() request: Request
     ){
         try {
-            const cookie = request.cookies['jwt'];
+            const cookie = request.headers.authorization
             const data = await this.jwtService.verifyAsync(cookie);
             console.log(data)
             addPhamarcy.createdById = data.id
@@ -58,11 +58,15 @@ export class PhamarcyController{
         @Req() request : Request
     ){
         try {
-            const cookie = request.cookies['jwt'];
-        const data = await this.jwtService.verifyAsync(cookie);
-        if (!data) {
-            throw new UnauthorizedException();
-        }
+            const cookie = request.headers.authorization
+            console.log(cookie)
+              const data = await this.jwtService.verifyAsync(cookie);
+              console.log(data)
+          if (!data) {
+             console.log(cookie)
+              throw new UnauthorizedException();
+          }
+          console.log(data)
         return await this.phamarchService.getPhamarcy(pharmacyDto)
         } catch (error) {
          return{
@@ -79,11 +83,11 @@ export class PhamarcyController{
         @Req() request : Request
     ){
         try {
-            const cookie = request.cookies['jwt'];
-            const data = await this.jwtService.verifyAsync(cookie);
-            if (!data) {
-                throw new UnauthorizedException();
-            }
+            const cookie = request.headers.authorization
+             const data = await this.jwtService.verifyAsync(cookie);
+             if (!data) {
+                 throw new UnauthorizedException();
+             }
             return await this.phamarchService.getPhamarcyById(id)
         } catch (error) {
             return{
@@ -101,12 +105,12 @@ export class PhamarcyController{
         @Req() request : Request
     ){
         try {
-            const cookie = request.cookies['jwt'];
-        const data = await this.jwtService.verifyAsync(cookie);
-        if (!data) {
-            throw new UnauthorizedException();
-        }
-        update.updatedById = data.id
+            const cookie = request.headers.authorization
+         const data = await this.jwtService.verifyAsync(cookie);
+         if (!data) {
+             throw new UnauthorizedException();
+         }
+         update.updatedById = data.id
         return await this.phamarchService.updatePhamarcy(id, update)
         } catch (error) {
             return{
@@ -123,11 +127,11 @@ export class PhamarcyController{
         @Req() request : Request
     ){
         try {
-            const cookie = request.cookies['jwt'];
-        const data = await this.jwtService.verifyAsync(cookie);
-        if (!data) {
-            throw new UnauthorizedException();
-        }
+            const cookie = request.headers.authorization
+         const data = await this.jwtService.verifyAsync(cookie);
+         if (!data) {
+             throw new UnauthorizedException();
+         }
         return await this.phamarchService.deletePhamarcyById(id)
         } catch (error) {
             

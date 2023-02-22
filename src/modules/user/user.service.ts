@@ -70,6 +70,7 @@ export class UserService {
             status: true,
             message: "user successfully created",
             userId:result?.id as string,
+            user:result
         }
         } catch (error) {
             return{

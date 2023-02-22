@@ -52,7 +52,7 @@ export class UsersController{
         @Req() request: Request
     ){
         try {
-            const cookie = request.cookies['jwt'];
+            const cookie = request.headers.authorization
         const data = await this.jwtService.verifyAsync(cookie);
         if (!data) {
             throw new UnauthorizedException();
@@ -72,7 +72,7 @@ export class UsersController{
         @Req() request: Request
     ){
         try {
-            const cookie = request.cookies['jwt'];
+            const cookie = request.headers.authorization
             const data = await this.jwtService.verifyAsync(cookie);
             if (!data) {
                 throw new UnauthorizedException();
@@ -93,7 +93,7 @@ export class UsersController{
         @Query() userDto: UserDto,
     ){
         try {
-            const cookie = request.cookies['jwt'];
+            const cookie = request.headers.authorization
             const data = await this.jwtService.verifyAsync(cookie);
             if (!data) {
                 throw new UnauthorizedException();
@@ -112,7 +112,7 @@ export class UsersController{
         @Req() request: Request
     ){
         try {
-        const cookie = request.cookies['jwt'];
+            const cookie = request.headers.authorization
         const data = await this.jwtService.verifyAsync(cookie);
         if (!data) {
             throw new UnauthorizedException();
@@ -133,7 +133,7 @@ export class UsersController{
         @Req() request: Request
     ){
         try {
-            const cookie = request.cookies['jwt'];
+            const cookie = request.headers.authorization
         const data = await this.jwtService.verifyAsync(cookie);
         if (!data) {
             throw new UnauthorizedException();
@@ -164,7 +164,7 @@ export class UsersController{
         @Req() request: Request
     ){
         try {
-            const cookie = request.cookies['jwt'];
+            const cookie = request.headers.authorization
         const data = await this.jwtService.verifyAsync(cookie);
         if (!data) {
             throw new UnauthorizedException();
@@ -217,7 +217,7 @@ export class UsersController{
         @Res({passthrough: true}) response: Response,
         @Req() request: Request
         ) {
-        const cookie = request.cookies['jwt'];
+            const cookie = request.headers.authorization
         const data = await this.jwtService.verifyAsync(cookie);
         if (!data) {
             throw new UnauthorizedException();
