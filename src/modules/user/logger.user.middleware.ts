@@ -17,7 +17,7 @@ export class LoggerUserMiddleware implements NestMiddleware{
     async use(req:Request , res:Response , next: ()=>void){
         
         const request = {
-            cookies: req.cookies['jwt'],
+            cookies: req.headers.authorization,
             params: req.params,
             query: req.query,
             body: req.body,
@@ -32,12 +32,6 @@ export class LoggerUserMiddleware implements NestMiddleware{
         if(cookie !== undefined){
             const data = await this.jwtService.verifyAsync(cookie);
         }
-        //@ts-ignore
-        if (!data && !(req.url === '/users/login')) {
-            throw new UnauthorizedException();
-            
-        }
-        console.log(res)
         const result = this.userRequestService.insertRequest(request)
         next()
     }
