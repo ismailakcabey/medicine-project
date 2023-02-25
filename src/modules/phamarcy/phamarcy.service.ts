@@ -77,7 +77,10 @@ export class PhamarcyService{
             }
         }
         const result = await this.phamarcy.findByIdAndUpdate(id,phamarcy)
-        return result
+        return {
+            status:true,
+            data:result
+        }
     }
 
     async deletePhamarcyById(id:string){

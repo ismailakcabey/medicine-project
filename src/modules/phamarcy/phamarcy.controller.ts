@@ -58,14 +58,10 @@ export class PhamarcyController{
     ){
         try {
             const cookie = request.headers.authorization
-            console.log(cookie)
               const data = await this.jwtService.verifyAsync(cookie);
-              console.log(data)
           if (!data) {
-             console.log(cookie)
               throw new UnauthorizedException();
           }
-          console.log(data)
         return await this.phamarchService.getPhamarcy(pharmacyDto)
         } catch (error) {
          return{

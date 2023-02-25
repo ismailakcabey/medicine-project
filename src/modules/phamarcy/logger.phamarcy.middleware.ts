@@ -23,7 +23,6 @@ export class LoggerPhamarcyMiddleware implements NestMiddleware{
             url: req.url
         }
         const cookie = req.headers.authorization
-        console.log("geldi")
         if(cookie !== undefined){
             const data = await this.jwtService.verifyAsync(cookie);
         }
