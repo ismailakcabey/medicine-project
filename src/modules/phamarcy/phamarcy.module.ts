@@ -5,10 +5,13 @@ import { PhamarcySchema } from "./phamarcy.model";
 import { ConfigService , ConfigModule } from "@nestjs/config";
 import { PhamarcyService } from "./phamarcy.service";
 import { PhamarcyController } from "./phamarcy.controller";
+import { UserSchema } from "../user/user.model";
+import { PhamarcyLogModule } from "../phamarcy-log/phamarcyLog.module";
 
 @Module({
     imports: [
         MongooseModule.forFeature([{name:"MedicinePhamarcy",schema:PhamarcySchema}]),
+        MongooseModule.forFeature([{name:"MedicineUser",schema:UserSchema}]),
         ConfigModule.forRoot({
             isGlobal: true,
           }),
@@ -22,7 +25,8 @@ import { PhamarcyController } from "./phamarcy.controller";
          JwtModule.register({
           secret: 'secret',
           signOptions: {expiresIn: '1d'}
-      })
+      }),
+      PhamarcyLogModule
     ],
     controllers: [
         PhamarcyController

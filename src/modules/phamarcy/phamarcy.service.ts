@@ -5,12 +5,15 @@ import { Phamarcy } from "./phamarcy.model";
 import * as dotenv from 'dotenv'
 import { Injectable } from "@nestjs/common";
 import { error } from "console";
+import { Role } from "../user/user.enum";
+import { User } from "../user/user.model";
 dotenv.config()
 
 @Injectable()
 export class PhamarcyService{
     constructor(
-        @InjectModel('MedicinePhamarcy') private readonly phamarcy : Model<Phamarcy>
+        @InjectModel('MedicinePhamarcy') private readonly phamarcy : Model<Phamarcy>,
+        @InjectModel('MedicineUser') private readonly user: Model<User>,
     ){}
 
     
@@ -24,6 +27,13 @@ export class PhamarcyService{
                     message:"already phone number"
                 }
             }
+            const createdUser = await this.user.findOne({_id: phamarcy?.createdById})
+            if(createdUser?.role == Role.ADMIN_EMPLOOYE){
+            return {
+                status: false,
+                message:"this user is'nt created phamarcy"
+            }
+        }
             const result = await addPhamarcy.save()
             return{
                 status:true,

@@ -10,12 +10,16 @@ import { UsersController } from './modules/user/user.controller';
 import { UserLogModule } from './modules/user-log/userLog.module'
 import { UserTokenModule } from './modules/user-token/userToken.module';
 import { PhamarcyModule } from './modules/phamarcy/phamarcy.module';
+import { LoggerPhamarcyMiddleware } from './modules/phamarcy/logger.phamarcy.middleware';
+import { PhamarcyController } from './modules/phamarcy/phamarcy.controller';
+import { PhamarcyLogModule } from './modules/phamarcy-log/phamarcyLog.module';
 @Module({
   imports: [
     UserModule,
     UserLogModule,
     UserTokenModule,
     PhamarcyModule,
+    PhamarcyLogModule,
     ConfigModule.forRoot(),
     JwtModule.register({
       secret: 'secret',
@@ -27,6 +31,7 @@ import { PhamarcyModule } from './modules/phamarcy/phamarcy.module';
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
-      consumer.apply(LoggerUserMiddleware).forRoutes(UsersController)
+      consumer.apply(LoggerUserMiddleware).forRoutes(UsersController),
+      consumer.apply(LoggerPhamarcyMiddleware).forRoutes(PhamarcyController)
   }
 }

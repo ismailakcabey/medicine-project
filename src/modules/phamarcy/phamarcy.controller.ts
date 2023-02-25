@@ -37,7 +37,6 @@ export class PhamarcyController{
         try {
             const cookie = request.headers.authorization
             const data = await this.jwtService.verifyAsync(cookie);
-            console.log(data)
             addPhamarcy.createdById = data.id
         if (!data) {
             throw new UnauthorizedException();

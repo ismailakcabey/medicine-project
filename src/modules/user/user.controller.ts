@@ -41,8 +41,12 @@ export class UsersController{
 
     @Post()
     async insertUser(
-        @Body() addUser : UserDto
+        @Body() addUser : UserDto,
+        @Req() request: Request
     ){
+        const cookie = request.headers.authorization
+        const data = await this.jwtService.verifyAsync(cookie);
+        addUser.createdById = data.id
         return await this.usersService.insertUser(addUser)
     }
 
@@ -184,12 +188,8 @@ export class UsersController{
         @Body('password') password: string,
         @Res({passthrough: true}) response: Response,
         @Req() request: Request
-    ):Promise<{
-        status:boolean,
-        token:string
-    }>{
+    ){
         const user = await this.usersService.getEmailUser(mail);
-        console.log(user)
         if (user.data === null) {
             throw new UnauthorizedException('user is not defined');
         }
@@ -205,10 +205,10 @@ export class UsersController{
             deleted:false
         }
         await this.userTokenService.insertToken(token)
-        console.log("jwt="+jwt)
         return {
             status: true,
-            token:"jwt="+jwt
+            token:jwt,
+            user:user
         };
     }
 
