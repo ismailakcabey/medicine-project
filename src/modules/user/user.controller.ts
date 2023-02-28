@@ -51,6 +51,7 @@ export class UsersController{
         const cookie = request.headers.authorization
         const data = await this.jwtService.verifyAsync(cookie);
         addUser.createdById = data.id
+        await this.cacheManager.del('users')
         return await this.usersService.insertUser(addUser)
     }
 
@@ -68,14 +69,14 @@ export class UsersController{
         }
         
         let datas = await this.cacheManager.get('users')
-        if(datas === undefined) {
+        if(datas === undefined || datas === null) {
             console.log('undifined cachhe')
             const users = await this.usersService.getAllUser(userDto)
-            console.log('users', datas)
             await this.cacheManager.set('users',users)
             return users
         }
         else{
+            console.log('redisdeki datalar: '+JSON.stringify(datas))
             console.log('defined cachhe')
             return datas
         }
@@ -160,6 +161,7 @@ export class UsersController{
         }
         update.updatedById = data.id
             const user = await this.usersService.updateUserById(id,update)
+            await this.cacheManager.del('users')
         return user
         } catch (error) {
             return{
@@ -190,6 +192,8 @@ export class UsersController{
             throw new UnauthorizedException();
         }
             const user = await this.usersService.delUserById(id)
+            await this.cacheManager.del('users')
+            
             return user 
         } catch (error) {
             return{
