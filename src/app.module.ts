@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { CacheModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,7 +24,12 @@ import { PhamarcyLogModule } from './modules/phamarcy-log/phamarcyLog.module';
     JwtModule.register({
       secret: 'secret',
       signOptions: {expiresIn: '1d'}
-  })
+  }),
+  CacheModule.register({
+    ttl:500000,
+    isGlobal:true,
+    //max:1000
+})
   ],
   controllers: [AppController],
   providers: [AppService],

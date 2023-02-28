@@ -11,7 +11,9 @@ BadRequestException,
 Res,
 Req,
 UnauthorizedException,
-UseGuards
+UseGuards,
+Inject,
+CACHE_MANAGER
 } from "@nestjs/common";
 import { Filter } from "mongodb";
 import { filter } from "rxjs";
@@ -27,6 +29,7 @@ import { Roles } from "./role.decorator";
 import { Role } from "./user.enum";
 import { send_verify_email } from "./sendEmail";
 import { request } from "http";
+import { Cache } from "cache-manager";
 const passwordHash = require('password-hash');
 
 @ApiTags('User')
@@ -34,6 +37,7 @@ const passwordHash = require('password-hash');
 @UseGuards(RoleGuard)
 export class UsersController{
     constructor(
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
         private readonly usersService:UserService,
         private jwtService: JwtService,
         private readonly userTokenService:UserTokenService
@@ -56,13 +60,25 @@ export class UsersController{
         @Req() request: Request
     ){
         try {
+            
             const cookie = request.headers.authorization
         const data = await this.jwtService.verifyAsync(cookie);
         if (!data) {
             throw new UnauthorizedException();
         }
-        const users = await this.usersService.getAllUser(userDto)
-        return users
+        
+        let datas = await this.cacheManager.get('users')
+        if(datas === undefined) {
+            console.log('undifined cachhe')
+            const users = await this.usersService.getAllUser(userDto)
+            console.log('users', datas)
+            await this.cacheManager.set('users',users)
+            return users
+        }
+        else{
+            console.log('defined cachhe')
+            return datas
+        }
         } catch (error) {
             return{
                 error:error.message,
