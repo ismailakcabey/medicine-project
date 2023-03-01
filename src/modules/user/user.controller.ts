@@ -51,7 +51,7 @@ export class UsersController{
         const cookie = request.headers.authorization
         const data = await this.jwtService.verifyAsync(cookie);
         addUser.createdById = data.id
-        await this.cacheManager.del('users')
+        //await this.cacheManager.del('users')
         return await this.usersService.insertUser(addUser)
     }
 
@@ -67,19 +67,10 @@ export class UsersController{
         if (!data) {
             throw new UnauthorizedException();
         }
-        
-        let datas = await this.cacheManager.get('users')
-        if(datas === undefined || datas === null) {
-            console.log('undifined cachhe')
             const users = await this.usersService.getAllUser(userDto)
-            await this.cacheManager.set('users',users)
+            //await this.cacheManager.set('users', users);
             return users
-        }
-        else{
-            console.log('redisdeki datalar: '+JSON.stringify(datas))
-            console.log('defined cachhe')
-            return datas
-        }
+        
         } catch (error) {
             return{
                 error:error.message,
@@ -161,7 +152,7 @@ export class UsersController{
         }
         update.updatedById = data.id
             const user = await this.usersService.updateUserById(id,update)
-            await this.cacheManager.del('users')
+            // await this.cacheManager.del('users')
         return user
         } catch (error) {
             return{
@@ -192,7 +183,7 @@ export class UsersController{
             throw new UnauthorizedException();
         }
             const user = await this.usersService.delUserById(id)
-            await this.cacheManager.del('users')
+            // await this.cacheManager.del('users')
             
             return user 
         } catch (error) {
@@ -209,6 +200,7 @@ export class UsersController{
         @Res({passthrough: true}) response: Response,
         @Req() request: Request
     ){
+        console.log("geldi")
         const user = await this.usersService.getEmailUser(mail);
         if (user.data === null) {
             throw new UnauthorizedException('user is not defined');
