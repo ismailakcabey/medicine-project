@@ -15,6 +15,7 @@ import { PhamarcyController } from './modules/phamarcy/phamarcy.controller';
 import { PhamarcyLogModule } from './modules/phamarcy-log/phamarcyLog.module';
 import type { RedisClientOptions } from 'redis';
 import { redisStore } from 'cache-manager-redis-store'
+import { MedicineModule } from './modules/medicine/medicine.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { redisStore } from 'cache-manager-redis-store'
     UserTokenModule,
     PhamarcyModule,
     PhamarcyLogModule,
+    MedicineModule,
     ConfigModule.forRoot(),
     JwtModule.register({
       secret: 'secret',
