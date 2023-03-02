@@ -3,10 +3,12 @@ import {
     IsEnum,
     IsDate,
     IsNumber,
-    IsBoolean
+    IsBoolean,
+    IsArray
 } from 'class-validator'
 import { IsObjectId } from 'class-validator-mongo-object-id'
 import { ApiProperty } from '@nestjs/swagger'
+import { Medicine } from '../medicine/medicine.model';
 
 export class PhamarcyDto{
 
@@ -52,6 +54,14 @@ export class PhamarcyDto{
     })
     @IsString()
     phamarcyName: string
+
+
+    @ApiProperty({
+        nullable: false,
+        required:false
+    })
+    @IsArray()
+    medicines: Array<Medicine>
 
 
     @ApiProperty({

@@ -22,10 +22,6 @@ export class LoggerPhamarcyMiddleware implements NestMiddleware{
             ip: req.ip,
             url: req.url
         }
-        const cookie = req.headers.authorization
-        if(cookie !== undefined){
-            const data = await this.jwtService.verifyAsync(cookie);
-        }
         const result = this.phamarcyLogService.insertLog(request)
         next()
     }

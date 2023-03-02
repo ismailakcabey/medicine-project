@@ -16,7 +16,7 @@ export class PhamarcyLogService {
             const result = await addReq.save()
             return{
                 status: true,
-                message: "user successfully created",
+                message: "log successfully created",
                 userId:result?.id as string,
             }
         } catch (error) {

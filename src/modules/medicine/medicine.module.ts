@@ -5,6 +5,7 @@ import { ConfigService , ConfigModule } from "@nestjs/config";
 import { MedicineSchema } from "./medicine.model";
 import { MedicineService } from "./medicine.service";
 import { MedicineController } from "./medicine.controller";
+import { LoggerMedicineMiddleware } from "./logger.medicine.middleware";
 @Module({
     imports: [
         MongooseModule.forFeature([{name:"MedicineMedicine",schema:MedicineSchema}]),
@@ -27,7 +28,7 @@ import { MedicineController } from "./medicine.controller";
         MedicineController
     ],
     providers: [
-        MedicineService
+        MedicineService,
     ]
 })
 

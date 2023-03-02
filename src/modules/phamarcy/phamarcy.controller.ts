@@ -106,6 +106,10 @@ export class PhamarcyController{
              throw new UnauthorizedException();
          }
          update.updatedById = data.id
+         update.updatedDate = new Date
+         if(update.medicines){
+            update.medicineCount = update.medicines.length
+         }
         return await this.phamarchService.updatePhamarcy(id, update)
         } catch (error) {
             return{

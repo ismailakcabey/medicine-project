@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { MedicineSchema , Medicine} from "../medicine/medicine.model";
 
 export const PhamarcySchema = new mongoose.Schema({
 
@@ -36,6 +37,11 @@ export const PhamarcySchema = new mongoose.Schema({
         required: false
     },
 
+    medicines:{
+        type: [MedicineSchema],
+        required: false,
+    },
+
     phoneNumber:{
         type:String,
         required: true
@@ -63,4 +69,5 @@ export interface Phamarcy extends mongoose.Document{
     phoneNumber:string,
     createdById:mongoose.Schema.Types.ObjectId,
     updatedById:mongoose.Schema.Types.ObjectId,
+    medicines: Array<Medicine>
 }

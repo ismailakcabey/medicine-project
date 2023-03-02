@@ -150,6 +150,7 @@ export class UsersController{
         if (!data) {
             throw new UnauthorizedException();
         }
+        update.updatedDate = new Date
         update.updatedById = data.id
             const user = await this.usersService.updateUserById(id,update)
             // await this.cacheManager.del('users')
@@ -200,7 +201,6 @@ export class UsersController{
         @Res({passthrough: true}) response: Response,
         @Req() request: Request
     ){
-        console.log("geldi")
         const user = await this.usersService.getEmailUser(mail);
         if (user.data === null) {
             throw new UnauthorizedException('user is not defined');

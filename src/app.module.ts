@@ -16,6 +16,9 @@ import { PhamarcyLogModule } from './modules/phamarcy-log/phamarcyLog.module';
 import type { RedisClientOptions } from 'redis';
 import { redisStore } from 'cache-manager-redis-store'
 import { MedicineModule } from './modules/medicine/medicine.module';
+import { LoggerMedicineMiddleware } from './modules/medicine/logger.medicine.middleware';
+import { MedicineController } from './modules/medicine/medicine.controller';
+import { MedicineLogModule } from './modules/medicine-log/medicineLog.module';
 
 @Module({
   imports: [
@@ -25,6 +28,7 @@ import { MedicineModule } from './modules/medicine/medicine.module';
     PhamarcyModule,
     PhamarcyLogModule,
     MedicineModule,
+    MedicineLogModule,
     ConfigModule.forRoot(),
     JwtModule.register({
       secret: 'secret',
@@ -58,5 +62,6 @@ export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
       consumer.apply(LoggerUserMiddleware).forRoutes(UsersController),
       consumer.apply(LoggerPhamarcyMiddleware).forRoutes(PhamarcyController)
+      consumer.apply(LoggerMedicineMiddleware).forRoutes(MedicineController)
   }
 }

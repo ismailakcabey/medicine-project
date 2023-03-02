@@ -27,6 +27,30 @@ export class MedicineService{
         }
     }
 
+    async medicineUpdate(id:string,medicines: MedicineDto){
+        try {
+        const result = await this.medicine.findByIdAndUpdate(id,medicines)
+        return{
+            status:true,
+            medicineId: result
+        }
+        } catch (error) {
+         console.log(error)   
+        }
+    }
+
+    async medicineDel(id: string){
+        try {
+            const result = await this.medicine.findByIdAndDelete(id)
+        return{
+            status:true,
+            medicineId: result?.id as string,
+        }
+        } catch (error) {
+         console.log(error)   
+        }
+    }
+
     async getMedicine(filter: MedicineDto):Promise<{
         status:boolean,
         count:number,
@@ -37,6 +61,17 @@ export class MedicineService{
         return {
             status:true,
             count:dataCount,
+            data: data
+        }
+    }
+
+    async getMedicineById(id: string):Promise<{
+        status:boolean,
+        data: Medicine
+    }>{
+        const data =  await this.medicine.findById(id);
+        return {
+            status:true,
             data: data
         }
     }

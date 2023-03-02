@@ -43,7 +43,75 @@ export class MedicineController{
         if (!data) {
             throw new UnauthorizedException();
         }
+        await this.cacheManager.del('medicines');
         return await this.medicineService.medicineInsert(addMedicine)
+        } catch (error) {
+            return{
+                status:false,
+                message: error.message
+            }
+        }
+    }
+
+
+    @Patch(':id')
+    async patchPhamarcyById(
+        @Param('id') id : string,
+        @Body() update: MedicineDto,
+        @Req() request : Request
+    ){
+        try {
+            const cookie = request.headers.authorization
+         const data = await this.jwtService.verifyAsync(cookie);
+         if (!data) {
+             throw new UnauthorizedException();
+         }
+         update.updatedDate = new Date
+         update.updatedById = data.id
+         await this.cacheManager.del('medicines');
+        return await this.medicineService.medicineUpdate(id, update)
+        } catch (error) {
+            return{
+                status:false,
+                message:error.message
+            }
+        }
+    }
+
+
+    @Delete(':id')
+    async deleteMedicine(
+        @Param('id') id:string,
+        @Req() request: Request
+    ){
+        try {
+            const cookie = request.headers.authorization
+            const data = await this.jwtService.verifyAsync(cookie);
+        if (!data) {
+            throw new UnauthorizedException();
+        }
+        await this.cacheManager.del('medicines');
+        return await this.medicineService.medicineDel(id)
+        } catch (error) {
+            return{
+                status:false,
+                message: error.message
+            }
+        }
+    }
+
+    @Get(':id')
+    async getMedicineById(
+        @Param('id') id:string,
+        @Req() request: Request
+    ){
+        try {
+            const cookie = request.headers.authorization
+            const data = await this.jwtService.verifyAsync(cookie);
+        if (!data) {
+            throw new UnauthorizedException();
+        }
+        return await this.medicineService.getMedicineById(id)
         } catch (error) {
             return{
                 status:false,
