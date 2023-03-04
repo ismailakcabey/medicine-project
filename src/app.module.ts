@@ -23,6 +23,10 @@ import { PrescriptionsModule } from './modules/prescriptions/prescriptions.modul
 import { LoggerPrescriptionsMiddleware } from './modules/prescriptions/logger. prescriptions.middleware';
 import { PrescriptionsController } from './modules/prescriptions/prescriptions.controller';
 import { PrescriptionsLogModule } from './modules/prescriptions-log/prescriptionsLog.module';
+import { OrderModule } from './modules/order/order.module';
+import { LoggerOrderMiddleware } from './modules/order/logger.order.middleware';
+import { OrderController } from './modules/order/order.controller';
+import { OrderLogModule } from './modules/order-log/orderLog.module';
 
 @Module({
   imports: [
@@ -35,6 +39,8 @@ import { PrescriptionsLogModule } from './modules/prescriptions-log/prescription
     MedicineLogModule,
     PrescriptionsModule,
     PrescriptionsLogModule,
+    OrderModule,
+    OrderLogModule,
     ConfigModule.forRoot(),
     JwtModule.register({
       secret: 'secret',
@@ -70,5 +76,6 @@ export class AppModule implements NestModule{
       consumer.apply(LoggerPhamarcyMiddleware).forRoutes(PhamarcyController)
       consumer.apply(LoggerMedicineMiddleware).forRoutes(MedicineController)
       consumer.apply(LoggerPrescriptionsMiddleware).forRoutes(PrescriptionsController)
+      consumer.apply(LoggerOrderMiddleware).forRoutes(OrderController)
   }
 }

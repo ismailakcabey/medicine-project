@@ -98,7 +98,7 @@ export class UsersController{
         }
     }
 
-    @Get('pharmcy/:id')
+    @Get('/pharmcy/:id')
     async getUserByPharmcyId(
         @Param('id') id : string,
         @Req() request: Request,
