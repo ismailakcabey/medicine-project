@@ -14,76 +14,35 @@ import {
     Param
 } from '@nestjs/common'
 import { Filter } from 'mongodb'
-import { PhamarcyDto } from './phamarcy.dto'
-import { PhamarcyService } from './phamarcy.service'
 import { ApiTags } from '@nestjs/swagger'
 import { Response, Request, request } from 'express'
 import { JwtService } from '@nestjs/jwt'
 import { th } from 'date-fns/locale'
+import { PrescriptionsService } from './prescriptions.service'
+import { PrescriptionsDto } from './prescriptions.dto'
 
-@ApiTags('Phamarcy')
-@Controller('phamarcy')
-export class PhamarcyController{
+@ApiTags('Prescriptions')
+@Controller('prescriptions')
+export class PrescriptionsController{
     constructor(
-        private readonly phamarchService: PhamarcyService,
-        private jwtService: JwtService,
+        private readonly prescriptionsService: PrescriptionsService,
+        private jwtService: JwtService
     ){}
 
+
     @Post()
-    async insertPhamarcy(
-        @Body() addPhamarcy: PhamarcyDto,
+    async insertPrescriptions(
+        @Body() addPresction: PrescriptionsDto,
         @Req() request: Request
     ){
         try {
             const cookie = request.headers.authorization
             const data = await this.jwtService.verifyAsync(cookie);
-            addPhamarcy.createdById = data.id
+            addPresction.createdById = data.id
         if (!data) {
             throw new UnauthorizedException();
         }
-        return await this.phamarchService.insertPhamarcy(addPhamarcy)
-        } catch (error) {
-            return{
-                status:false,
-                message: error.message
-            }
-        }
-    }
-
-
-    @Get()
-    async getAllPhamarcy(
-        @Query() pharmacyDto : PhamarcyDto,
-        @Req() request : Request
-    ){
-        try {
-            const cookie = request.headers.authorization
-              const data = await this.jwtService.verifyAsync(cookie);
-          if (!data) {
-              throw new UnauthorizedException();
-          }
-        return await this.phamarchService.getPhamarcy(pharmacyDto)
-        } catch (error) {
-         return{
-            status:false,
-            message:error.message
-         }   
-        }
-    }
-
-
-    @Get(':id')
-    async getPhamarcyById(
-        @Param('id') id : string,
-        @Req() request : Request
-    ){
-        try {
-            const cookie = request.headers.authorization
-             const data = await this.jwtService.verifyAsync(cookie);
-             if (!data) {
-                 throw new UnauthorizedException();
-             }
-            return await this.phamarchService.getPhamarcyById(id)
+        return await this.prescriptionsService.insertPrescriptions(addPresction)
         } catch (error) {
             return{
                 status:false,
@@ -92,8 +51,26 @@ export class PhamarcyController{
         }
     }
 
-    @Get('prescriptions/:id')
-    async getPriscriptonsByPhamarcyById(
+    @Get()
+    async getPrescriptions(
+        @Query() addPresction: PrescriptionsDto,
+        @Req() request: Request 
+    ){
+        try {
+            const cookie = request.headers.authorization
+             const data = await this.jwtService.verifyAsync(cookie);
+             if (!data) {
+                 throw new UnauthorizedException();
+             }
+            return await this.prescriptionsService.getPrescriptions(addPresction)
+        } catch (error) {
+            
+        }
+    }
+
+
+    @Get(':id')
+    async getPrescriptionsById(
         @Param('id') id : string,
         @Req() request : Request
     ){
@@ -103,7 +80,7 @@ export class PhamarcyController{
              if (!data) {
                  throw new UnauthorizedException();
              }
-            return await this.phamarchService.getPrescriptions(id)
+            return await this.prescriptionsService.getPrescriptionsById(id)
         } catch (error) {
             return{
                 status:false,
@@ -116,7 +93,7 @@ export class PhamarcyController{
     @Patch(':id')
     async patchPhamarcyById(
         @Param('id') id : string,
-        @Body() update: PhamarcyDto,
+        @Body() update: PrescriptionsDto,
         @Req() request : Request
     ){
         try {
@@ -130,7 +107,7 @@ export class PhamarcyController{
          if(update.medicines){
             update.medicineCount = update.medicines.length
          }
-        return await this.phamarchService.updatePhamarcy(id, update)
+        return await this.prescriptionsService.updatePrescriptions(id, update)
         } catch (error) {
             return{
                 status:false,
@@ -151,7 +128,7 @@ export class PhamarcyController{
          if (!data) {
              throw new UnauthorizedException();
          }
-        return await this.phamarchService.deletePhamarcyById(id)
+        return await this.prescriptionsService.deletePrescriptions(id)
         } catch (error) {
             
         }

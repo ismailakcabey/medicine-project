@@ -7,6 +7,7 @@ import { Injectable } from "@nestjs/common";
 import { error } from "console";
 import { Role } from "../user/user.enum";
 import { User } from "../user/user.model";
+import { Prescriptions } from "../prescriptions/prescriptions.model";
 dotenv.config()
 
 @Injectable()
@@ -14,6 +15,7 @@ export class PhamarcyService{
     constructor(
         @InjectModel('MedicinePhamarcy') private readonly phamarcy : Model<Phamarcy>,
         @InjectModel('MedicineUser') private readonly user: Model<User>,
+        @InjectModel('MedicinePrescriptions') private readonly prescriptions: Model<Prescriptions>,
     ){}
 
     
@@ -62,6 +64,17 @@ export class PhamarcyService{
             data: data
         }
     }
+
+
+    async getPrescriptions(id : string)
+    {
+        const data = await this.prescriptions.find({pharmcyId:id});
+        return {
+            status:true,
+            data: data
+        }
+    }
+
 
     async getPhamarcyById(id:string){
         const phamarcy = await this.phamarcy.findById(id)
