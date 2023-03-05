@@ -1,24 +1,29 @@
 import { Injectable , Inject , forwardRef } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { UserDto } from "./user.dto";
 import { Role } from "./user.enum";
-import { User } from "./user.model";
+import { User, UserExcel } from "./user.model";
 import {JwtService} from "@nestjs/jwt";
 const sgMail = require('@sendgrid/mail')
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import { send_verify_email } from "./sendEmail";
 import { UserRequestService } from "../user-log/userLog.service";
+var fs = require('fs');
+const XLSX = require('xlsx');
 dotenv.config()
 const passwordHash = require('password-hash');
+import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectModel('MedicineUser') private readonly user: Model<User>,
+        @InjectModel('MedicineUser') private readonly userModelExcel: Model<UserExcel>,
         
-    ){}
-    
+    ){
+    }
+
     async insertUser(users: UserDto){
         try {
         const addUser = new this.user(users);
@@ -257,6 +262,61 @@ request
                 data: error.data,
                 count: 0
             }
+        }
+    }
+
+    async getExcel(filter: UserDto){
+        const users = await this.userModelExcel.find(filter).exec();
+        return users.map(
+            user=> ({
+                fullName: user.fullName,
+                mail: user.mail,
+                birthDayDate: user.birthDayDate,
+                phoneNumber: user.phoneNumber,
+                identityId:user.identityId,
+            })
+        )
+    }
+
+    async s3Upload(file,fileName,fileType){
+        dotenv.config({debug: true});
+        AWS.config.update({
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+          });
+        const s3 = new AWS.S3()
+        
+       try {
+        await s3.putObject({
+            Body:file,
+            Bucket:process.env.AWS_BUCKET,
+            Key:`${fileName}${new Date}.${fileType}`
+        }).promise()
+       } catch (error) {
+        console.log(error)
+       }
+    }
+
+
+    async getUsersExcel(filter: UserDto){
+        const data = await this.getExcel(filter)
+        const workSheet = XLSX.utils.json_to_sheet(data);
+        const workBook = XLSX.utils.book_new();
+    
+        XLSX.utils.book_append_sheet(workBook, workSheet, `users`)
+        // Generate buffer
+        XLSX.write(workBook, { bookType: 'xlsx', type: "buffer" })
+    
+        // Binary string
+        XLSX.write(workBook, { bookType: "xlsx", type: "binary" })
+    
+        //XLSX.writeFile(workBook, `users.xlsx`)
+        const buffer = XLSX.write(workBook, { bookType: 'xlsx', type: 'buffer' });
+        this.s3Upload(buffer,"users","xlsx")
+        return{
+            status : true,
+            message : "Excel file generated",
+            workBook : workBook
         }
     }
 }

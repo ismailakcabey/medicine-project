@@ -88,3 +88,12 @@ export interface User extends mongoose.Document{
     adress:string,
     identityId:string
 }
+
+export interface UserExcel extends mongoose.Document{
+    fullName:string,
+    mail:string;
+    adress:string;
+    birthDayDate:Date,
+    phoneNumber:string,
+    identityId:string
+}
