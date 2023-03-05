@@ -119,6 +119,26 @@ export class UsersController{
         }
     }
 
+    @Get('/excel/export')
+    async getUserExcel(
+        @Req() request: Request,
+        @Query() userDto: UserDto,
+    ){
+        try {
+            const cookie = request.headers.authorization
+            const data = await this.jwtService.verifyAsync(cookie);
+            if (!data) {
+                throw new UnauthorizedException();
+            }
+            const user = await this.usersService.getUsersExcel(userDto);
+        return user
+        } catch (error) {
+            return{
+                error:error.message,
+            }
+        }
+    }
+
     @Get('/me/user')
     async getUserMe(
         @Req() request: Request
