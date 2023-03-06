@@ -20,7 +20,7 @@ import { filter } from "rxjs";
 import { UserDto } from "./user.dto";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { JwtService } from "@nestjs/jwt";
 import {Response, Request, response} from 'express';
 import { UserTokenService } from "../user-token/userToken.service";
@@ -43,6 +43,7 @@ export class UsersController{
         private readonly userTokenService:UserTokenService
     ){}
 
+    @ApiOperation({ summary: 'User Create', description: 'API to use to create user' })
     @Post()
     async insertUser(
         @Body() addUser : UserDto,
@@ -55,6 +56,7 @@ export class UsersController{
         return await this.usersService.insertUser(addUser)
     }
 
+    @ApiOperation({ summary: 'User View', description: 'API to use to list user' })
     @Get()
     async getAllUsers(
         @Query() userDto: UserDto,
@@ -78,6 +80,7 @@ export class UsersController{
         }
     }
 
+    @ApiOperation({ summary: 'User View', description: 'API to use to view a user' })
     @Get(':id')
     async getUsersById(
         @Param('id') id : string,
@@ -98,6 +101,7 @@ export class UsersController{
         }
     }
 
+    @ApiOperation({ summary: 'User View', description: 'API that lists users belonging to the pharmacy' })
     @Get('/pharmcy/:id')
     async getUserByPharmcyId(
         @Param('id') id : string,
@@ -119,6 +123,7 @@ export class UsersController{
         }
     }
 
+    @ApiOperation({ summary: 'User Excel Export', description: 'It is the API used to download the list of users to excel' })
     @Get('/excel/export')
     async getUserExcel(
         @Req() request: Request,
@@ -139,6 +144,7 @@ export class UsersController{
         }
     }
 
+    @ApiOperation({ summary: 'User View', description: 'API that allows the user to see their own information' })
     @Get('/me/user')
     async getUserMe(
         @Req() request: Request
@@ -158,6 +164,7 @@ export class UsersController{
         }
     }
 
+    @ApiOperation({ summary: 'User Update', description: 'API to be used to update the user' })
     @Patch(':id')
     async updateUsersById(
         @Param('id') id : string,
@@ -182,6 +189,7 @@ export class UsersController{
         }
     }
 
+    @ApiOperation({ summary: 'User Update', description: 'API to be used to verify the users email address' })
     @Get('/verify/:id')
     async verifyUserById(
         @Param('id') id : string
@@ -192,6 +200,7 @@ export class UsersController{
         return verify_html
     }
 
+    @ApiOperation({ summary: 'User Delete', description: 'API to be used to delete the user' })
     @Delete(':id')
     async delUsersById(
         @Param('id') id : string,
@@ -214,6 +223,7 @@ export class UsersController{
         }
     }
 
+    @ApiOperation({ summary: 'User Login', description: 'API to be used to login the user' })
     @Post('/login')
     async login(
         @Body('mail') mail: string,
@@ -244,6 +254,7 @@ export class UsersController{
         };
     }
 
+    @ApiOperation({ summary: 'User Logout', description: 'API to be used to logout the user' })
     @Post('/logout')
     async logout(
         @Res({passthrough: true}) response: Response,

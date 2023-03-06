@@ -14,7 +14,7 @@ import {
     Param
 } from '@nestjs/common'
 import { Filter } from 'mongodb'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { Response, Request, request } from 'express'
 import { JwtService } from '@nestjs/jwt'
 import { OrderService } from './order.service'
@@ -28,6 +28,7 @@ export class OrderController{
         private jwtService: JwtService
     ){}
 
+    @ApiOperation({ summary: 'Order Create', description: 'API to use to create order' })
     @Post()
     async insertOrder(
         @Body() order: OrderDto,
@@ -49,6 +50,7 @@ export class OrderController{
         }
     }
 
+    @ApiOperation({ summary: 'Order View', description: 'API to use to list order' })
     @Get()
     async getOrders(
         @Query() order:OrderDto,
@@ -62,6 +64,7 @@ export class OrderController{
         return await this.orderService.getOrders(order)
     }
 
+    @ApiOperation({ summary: 'Order View', description: 'API to use to view a order' })
     @Get(':id')
     async getOrderById(
         @Param('id') id: string,
@@ -82,6 +85,7 @@ export class OrderController{
         }
     }
 
+    @ApiOperation({ summary: 'Order View', description: 'API that lists order belonging to the pharmacy' })
     @Get('/pharmcy/:id')
     async getOrderByPhamarcy(
         @Param('id') id: string,
@@ -103,6 +107,7 @@ export class OrderController{
         }
     }
 
+    @ApiOperation({ summary: 'Order Update', description: 'API to be used to update the order' })
     @Patch(':id')
     async updateOrder(
         @Param('id') id: string,
@@ -118,6 +123,7 @@ export class OrderController{
         return await this.orderService.updateOrder(id,orders)
     }
 
+    @ApiOperation({ summary: 'Order Update', description: 'API to be used to update the order' })
     @Post('callBack')
     async callBackOrder(
         @Body() orders: any,
@@ -126,6 +132,7 @@ export class OrderController{
         return result
     }
 
+    @ApiOperation({ summary: 'Order Excel Export', description: 'It is the API used to download the list of order to excel' })
     @Get('/excel/export')
     async getUserExcel(
         @Req() request: Request,

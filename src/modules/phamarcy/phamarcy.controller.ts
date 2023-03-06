@@ -16,7 +16,7 @@ import {
 import { Filter } from 'mongodb'
 import { PhamarcyDto } from './phamarcy.dto'
 import { PhamarcyService } from './phamarcy.service'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { Response, Request, request } from 'express'
 import { JwtService } from '@nestjs/jwt'
 import { th } from 'date-fns/locale'
@@ -29,6 +29,7 @@ export class PhamarcyController{
         private jwtService: JwtService,
     ){}
 
+    @ApiOperation({ summary: 'Phamarcy Create', description: 'API to use to create phamarcy' })
     @Post()
     async insertPhamarcy(
         @Body() addPhamarcy: PhamarcyDto,
@@ -50,7 +51,7 @@ export class PhamarcyController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Phamarcy View', description: 'API to use to list phamarcy' })
     @Get()
     async getAllPhamarcy(
         @Query() pharmacyDto : PhamarcyDto,
@@ -71,7 +72,7 @@ export class PhamarcyController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Phamarcy View', description: 'API to use to view a phamarcy' })
     @Get(':id')
     async getPhamarcyById(
         @Param('id') id : string,
@@ -92,6 +93,7 @@ export class PhamarcyController{
         }
     }
 
+    @ApiOperation({ summary: 'Phamarcy View', description: 'API that lists phamarcy belonging to the prescriptions' })
     @Get('prescriptions/:id')
     async getPriscriptonsByPhamarcyById(
         @Param('id') id : string,
@@ -112,7 +114,7 @@ export class PhamarcyController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Phamarcy Update', description: 'API to be used to update the phamarcy' })
     @Patch(':id')
     async patchPhamarcyById(
         @Param('id') id : string,
@@ -139,7 +141,7 @@ export class PhamarcyController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Phamarcy Delete', description: 'API to be used to delete the phamarcy' })
     @Delete(':id')
     async deletePhamarcyById(
         @Param('id') id : string,
@@ -158,6 +160,7 @@ export class PhamarcyController{
 
     }
 
+    @ApiOperation({ summary: 'Phamarcy Excel Export', description: 'It is the API used to download the list of phamarcy to excel' })
     @Get('/excel/export')
     async getPhamarcyExcel(
         @Req() request: Request,

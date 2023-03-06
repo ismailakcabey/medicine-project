@@ -14,7 +14,7 @@ import {
     Param
 } from '@nestjs/common'
 import { Filter } from 'mongodb'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { Response, Request, request } from 'express'
 import { JwtService } from '@nestjs/jwt'
 import { th } from 'date-fns/locale'
@@ -29,7 +29,7 @@ export class PrescriptionsController{
         private jwtService: JwtService
     ){}
 
-
+    @ApiOperation({ summary: 'Prescriptions Create', description: 'API to use to create prescriptions' })
     @Post()
     async insertPrescriptions(
         @Body() addPresction: PrescriptionsDto,
@@ -51,6 +51,7 @@ export class PrescriptionsController{
         }
     }
 
+    @ApiOperation({ summary: 'Prescriptions View', description: 'API to use to list prescriptions' })
     @Get()
     async getPrescriptions(
         @Query() addPresction: PrescriptionsDto,
@@ -68,7 +69,7 @@ export class PrescriptionsController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Prescriptions View', description: 'API to use to view a prescriptions' })
     @Get(':id')
     async getPrescriptionsById(
         @Param('id') id : string,
@@ -89,7 +90,7 @@ export class PrescriptionsController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Prescriptions Update', description: 'API to be used to update the prescriptions' })
     @Patch(':id')
     async patchPhamarcyById(
         @Param('id') id : string,
@@ -116,7 +117,7 @@ export class PrescriptionsController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Prescriptions Delete', description: 'API to be used to delete the prescriptions' })
     @Delete(':id')
     async deletePhamarcyById(
         @Param('id') id : string,
@@ -135,6 +136,7 @@ export class PrescriptionsController{
 
     }
 
+    @ApiOperation({ summary: 'Prescriptions Excel Export', description: 'It is the API used to download the list of prescriptions to excel' })
     @Get('/excel/export')
     async getPrescriptionExcel(
         @Req() request: Request,

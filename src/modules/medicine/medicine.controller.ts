@@ -16,7 +16,7 @@ import {
     Inject
 } from '@nestjs/common'
 import { Filter } from 'mongodb'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { Response, Request, request } from 'express'
 import { JwtService } from '@nestjs/jwt'
 import { MedicineService } from './medicine.service'
@@ -31,6 +31,7 @@ export class MedicineController{
         private jwtService: JwtService,
     ){}
 
+    @ApiOperation({ summary: 'Medicine Create', description: 'API to use to create medicine' })
     @Post()
     async insertMedicine(
         @Body() addMedicine: MedicineDto,
@@ -53,7 +54,7 @@ export class MedicineController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Medicine Update', description: 'API to be used to update the medicine' })
     @Patch(':id')
     async patchPhamarcyById(
         @Param('id') id : string,
@@ -78,7 +79,7 @@ export class MedicineController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Medicine Delete', description: 'API to be used to delete the medicine' })
     @Delete(':id')
     async deleteMedicine(
         @Param('id') id:string,
@@ -100,6 +101,7 @@ export class MedicineController{
         }
     }
 
+    @ApiOperation({ summary: 'Medicine View', description: 'API to use to view a medicine' })
     @Get(':id')
     async getMedicineById(
         @Param('id') id:string,
@@ -120,7 +122,7 @@ export class MedicineController{
         }
     }
 
-
+    @ApiOperation({ summary: 'Medicine View', description: 'API to use to list medicine' })
     @Get()
     async getMedicine(
         @Query() medicineDto: MedicineDto,
@@ -150,6 +152,7 @@ export class MedicineController{
         }
     }
 
+    @ApiOperation({ summary: 'Medicine Excel Export', description: 'It is the API used to download the list of medicine to excel' })
     @Get('/excel/export')
     async getMedicineExcel(
         @Req() request: Request,
