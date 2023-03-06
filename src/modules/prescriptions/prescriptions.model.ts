@@ -77,3 +77,9 @@ export interface Prescriptions extends mongoose.Document{
     medicines: Array<Medicine>,
     medicineCount:number
 }
+
+export interface PrescriptionsExcel extends mongoose.Document{
+    name:string,
+    phoneNumber:string;
+    medicineCount:number;
+}

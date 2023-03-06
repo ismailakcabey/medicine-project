@@ -57,7 +57,6 @@ CacheModule.registerAsync({
   useFactory: async (configService: ConfigService) => ({
     host:'localhost',
     port:6379,
-    ttl:5,
     isGlobal: true,
     store: (await redisStore({
       url: configService.get('REDIS_URL'),

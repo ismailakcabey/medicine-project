@@ -135,5 +135,23 @@ export class PrescriptionsController{
 
     }
 
-
+    @Get('/excel/export')
+    async getPrescriptionExcel(
+        @Req() request: Request,
+        @Query() prescriptionsDto: PrescriptionsDto,
+    ){
+        try {
+            const cookie = request.headers.authorization
+            const data = await this.jwtService.verifyAsync(cookie);
+            if (!data) {
+                throw new UnauthorizedException();
+            }
+            const prescriptions = await this.prescriptionsService.getPrescriptionsExcel(prescriptionsDto);
+        return prescriptions
+        } catch (error) {
+            return{
+                error:error.message,
+            }
+        }
+    }
 }

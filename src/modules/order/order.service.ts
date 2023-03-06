@@ -3,20 +3,82 @@ import { Model } from "mongoose";
 import * as dotenv from 'dotenv'
 import { Injectable } from "@nestjs/common";
 import { error } from "console";
-import { Order } from "./order.model";
+import { Order, OrderExcel } from "./order.model";
 import { OrderDto } from "./order.dto";
 import { Prescriptions } from "../prescriptions/prescriptions.model";
 import { Phamarcy } from "../phamarcy/phamarcy.model";
 import axios from 'axios';
 import { th } from "date-fns/locale";
+import * as AWS from 'aws-sdk';
+var fs = require('fs');
+const XLSX = require('xlsx');
 dotenv.config();
 @Injectable()
 export class OrderService{
     constructor(
         @InjectModel('MedicineOrders') private readonly order: Model<Order>,
+        @InjectModel('MedicineOrders') private readonly orderExcel: Model<OrderExcel>,
         @InjectModel('MedicinePrescriptions') private readonly prescriptions: Model<Prescriptions>,
         @InjectModel('MedicinePhamarcy') private readonly phamarcy : Model<Phamarcy>,
     ){}
+
+    async getExcel(filter: OrderDto){
+        const users = await this.orderExcel.find(filter).exec();
+        return users.map(
+            user=> ({
+                externalId: user.externalId,
+                toAdress: user.toAdress,
+                toUserName: user.toUserName,
+                toPhoneNumber: user.toPhoneNumber,
+                fromAdress: user.fromAdress,
+                fromUserName: user.fromUserName,
+                fromPhoneNumber: user.fromPhoneNumber,
+                eczane: user.pharmcyId,
+                recete: user.prescriptionsId
+            })
+        )
+    }
+
+    async getOrderExcel(filter: OrderDto){
+        const data = await this.getExcel(filter)
+        const workSheet = XLSX.utils.json_to_sheet(data);
+        const workBook = XLSX.utils.book_new();
+    
+        XLSX.utils.book_append_sheet(workBook, workSheet, `order`)
+        // Generate buffer
+        XLSX.write(workBook, { bookType: 'xlsx', type: "buffer" })
+    
+        // Binary string
+        XLSX.write(workBook, { bookType: "xlsx", type: "binary" })
+    
+        //XLSX.writeFile(workBook, `users.xlsx`)
+        const buffer = XLSX.write(workBook, { bookType: 'xlsx', type: 'buffer' });
+        const url = this.s3Upload(buffer,"order","xlsx")
+        return{
+            status : true,
+            message : "Excel file generated",
+            workBook : workBook
+        }
+    }
+
+    async s3Upload(file,fileName,fileType){
+        dotenv.config({debug: true});
+        AWS.config.update({
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+          });
+        const s3 = new AWS.S3()
+        
+       try {
+        await s3.putObject({
+            Body:file,
+            Bucket:process.env.AWS_BUCKET,
+            Key:`${fileName}${new Date}.${fileType}`
+        }).promise()
+       } catch (error) {
+        console.log(error)
+       }
+    }
 
     async orderCreate(result:any){
         dotenv.config({debug: true});

@@ -71,3 +71,10 @@ export interface Phamarcy extends mongoose.Document{
     updatedById:mongoose.Schema.Types.ObjectId,
     medicines: Array<Medicine>
 }
+
+export interface PhamarcyExcel extends mongoose.Document{
+    phamarcyName:string,
+    adress:string,
+    medicineCount:number,
+    phoneNumber:string,
+}

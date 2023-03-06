@@ -101,3 +101,16 @@ export interface Order extends mongoose.Document{
     status:number,
     externalId:string,
 }
+
+export interface OrderExcel extends mongoose.Document{
+    pharmcyId:mongoose.Schema.Types.ObjectId,
+    prescriptionsId:mongoose.Schema.Types.ObjectId,
+    toAdress:string,
+    fromAdress:string,
+    fromPhoneNumber:string,
+    toPhoneNumber:string,
+    fromUserName:string,
+    toUserName:string,
+    status:number,
+    externalId:string,
+}

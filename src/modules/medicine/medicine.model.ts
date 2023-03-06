@@ -93,3 +93,15 @@ export interface Medicine extends mongoose.Document{
     desc:string,
     prescriptions:string,
 }
+
+export interface MedicineExcel extends mongoose.Document{
+    babyEssentialMedicineList:string,
+    name:string,
+    barcode:string,
+    atccode:string,
+    atcName:string,
+    componayName:string,
+    childEssentialMedicineList:string,
+    desc:string,
+    prescriptions:string,
+}

@@ -135,7 +135,8 @@ export class MedicineController{
           const redisData = await this.cacheManager.get('medicines')
           if(redisData === undefined || redisData == null){
             const datas = await this.medicineService.getMedicine(medicineDto)
-            await this.cacheManager.set('medicines',datas);
+            const ttl = 3000
+            await this.cacheManager.set('medicines',datas,ttl);
             return datas
           }
           else{
@@ -147,6 +148,35 @@ export class MedicineController{
                 message:error.message
              }   
         }
+    }
 
+    @Get('/excel/export')
+    async getMedicineExcel(
+        @Req() request: Request,
+        @Query() medicine: MedicineDto,
+    ){
+        try {
+            const cookie = request.headers.authorization
+            const data = await this.jwtService.verifyAsync(cookie);
+            if (!data) {
+                throw new UnauthorizedException();
+            }
+            const control= await this.cacheManager.get(`medicines/excel${data.id}`)
+            console.log(data.id)
+            if(control != null || control != undefined) {
+                return{
+                    status:false,
+                    message:"16 dakika 40 saniye geçmedi son excel alındıktan sonra"
+                }
+            }
+            
+            await this.cacheManager.set(`medicines/excel${data.id}`,true);
+            const prescriptions = await this.medicineService.getMedicineExcel(medicine);
+        return prescriptions
+        } catch (error) {
+            return{
+                error:error.message,
+            }
+        }
     }
 }

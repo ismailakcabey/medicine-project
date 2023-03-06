@@ -125,4 +125,24 @@ export class OrderController{
         const result = await this.orderService.callBackOrder(orders.customer_order_id,orders)
         return result
     }
+
+    @Get('/excel/export')
+    async getUserExcel(
+        @Req() request: Request,
+        @Query() orderDto: OrderDto,
+    ){
+        try {
+            const cookie = request.headers.authorization
+            const data = await this.jwtService.verifyAsync(cookie);
+            if (!data) {
+                throw new UnauthorizedException();
+            }
+            const orders = await this.orderService.getOrderExcel(orderDto);
+        return orders
+        } catch (error) {
+            return{
+                error:error.message,
+            }
+        }
+    }
 }

@@ -158,5 +158,25 @@ export class PhamarcyController{
 
     }
 
+    @Get('/excel/export')
+    async getPhamarcyExcel(
+        @Req() request: Request,
+        @Query() phamarcyDto: PhamarcyDto,
+    ){
+        try {
+            const cookie = request.headers.authorization
+            const data = await this.jwtService.verifyAsync(cookie);
+            if (!data) {
+                throw new UnauthorizedException();
+            }
+            const prescriptions = await this.phamarchService.getPhamarcyExcel(phamarcyDto);
+        return prescriptions
+        } catch (error) {
+            return{
+                error:error.message,
+            }
+        }
+    }
+
 
 }
