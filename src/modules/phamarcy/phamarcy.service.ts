@@ -34,7 +34,8 @@ export class PhamarcyService{
         )
     }
 
-    async getPhamarcyExcel(filter: PhamarcyDto){
+    async getPhamarcyExcel(filter: PhamarcyDto,id){
+        const user = await this.user.findById(id)
         const data = await this.getExcel(filter)
         const workSheet = XLSX.utils.json_to_sheet(data);
         const workBook = XLSX.utils.book_new();
@@ -48,7 +49,7 @@ export class PhamarcyService{
     
         //XLSX.writeFile(workBook, `users.xlsx`)
         const buffer = XLSX.write(workBook, { bookType: 'xlsx', type: 'buffer' });
-        const url = this.s3Upload(buffer,"phamarcy","xlsx")
+        const url = this.s3Upload(buffer,"phamarcy","xlsx",user)
         return{
             status : true,
             message : "Excel file generated",
@@ -56,7 +57,7 @@ export class PhamarcyService{
         }
     }
 
-    async s3Upload(file,fileName,fileType){
+    async s3Upload(file,fileName,fileType,user:User){
         dotenv.config({debug: true});
         AWS.config.update({
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -65,14 +66,57 @@ export class PhamarcyService{
         const s3 = new AWS.S3()
         
        try {
+        const name =fileName
+        const date = new Date
+        const date2 = date.toISOString();
+        const replaceDate = date2.replace(" ","+")
         await s3.putObject({
             Body:file,
             Bucket:process.env.AWS_BUCKET,
-            Key:`${fileName}${new Date}.${fileType}`
+            Key:`${name}${replaceDate}.${fileType}`
         }).promise()
+        const url = `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${name}${replaceDate}.${fileType}`
+        let result = url.replace(" ", "+");
+        const email = await this.sendExcelExportMail(result,user)
        } catch (error) {
         console.log(error)
        }
+    }
+
+    async sendExcelExportMail(url,user:User){
+        dotenv.config({debug: true});
+        const Mailjet = require('node-mailjet');
+const mailjet = new Mailjet({
+    apiKey: process.env.MAIL_JET_API_KEY,
+    apiSecret: process.env.MAIL_JET_API_SECRET_KEY
+  });
+const request = mailjet
+        .post('send', { version: 'v3.1' })
+        .request({
+          Messages: [
+            {
+              From: {
+                Email: process.env.MAIL_JET_SEND_EMAIL,
+                Name: "ECZANE SEPETI"
+              },
+              To: [
+                {
+                  Email: user.mail,
+                  Name: user.fullName
+                }
+              ],
+              Subject: "Excel export maili",
+              TextPart:`linkte tıklayarak dosyanızı indirebilirsiniz: ${url}`,
+            }
+          ]
+        })
+request
+    .then((result) => {
+    })
+    .catch((err) => {
+        console.log(err.statusCode)
+
+    })
     }
     
     async insertPhamarcy(phamarcy: PhamarcyDto){

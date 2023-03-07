@@ -20,6 +20,9 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { Response, Request, request } from 'express'
 import { JwtService } from '@nestjs/jwt'
 import { th } from 'date-fns/locale'
+import { User } from '../user/user.model'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
 
 @ApiTags('Phamarcy')
 @Controller('phamarcy')
@@ -27,6 +30,7 @@ export class PhamarcyController{
     constructor(
         private readonly phamarchService: PhamarcyService,
         private jwtService: JwtService,
+        @InjectModel('MedicineUser') private readonly user: Model<User>,
     ){}
 
     @ApiOperation({ summary: 'Phamarcy Create', description: 'API to use to create phamarcy' })
@@ -172,7 +176,7 @@ export class PhamarcyController{
             if (!data) {
                 throw new UnauthorizedException();
             }
-            const prescriptions = await this.phamarchService.getPhamarcyExcel(phamarcyDto);
+            const prescriptions = await this.phamarchService.getPhamarcyExcel(phamarcyDto,data.id);
         return prescriptions
         } catch (error) {
             return{
