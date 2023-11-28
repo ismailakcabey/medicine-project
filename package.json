@@ -54,7 +54,7 @@
     "mongodb": "^5.0.1",
     "mongoose": "^6.9.1",
     "nest-mongo-query-parser": "^1.0.9",
-    "node-mailjet": "^6.0.2",
+    "node-mailjet": "^6.0.5",
     "nodemailer": "^6.9.1",
     "password-hash": "^1.2.2",
     "redis": "^4.6.5",
