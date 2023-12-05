@@ -32,7 +32,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "^2.2.0",
     "@nestjs/swagger": "^6.2.1",
-    "@sendgrid/mail": "^7.7.0",
+    "@sendgrid/mail": "^8.0.0",
     "@types/cache-manager": "^4.0.2",
     "@types/cron": "^2.0.0",
     "amqp-connection-manager": "^4.1.11",
