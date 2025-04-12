@@ -23,7 +23,7 @@
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "^3.5.0",
     "@nestjs-query/core": "^0.30.0",
-    "@nestjs/common": "^9.0.0",
+    "@nestjs/common": "^11.0.16",
     "@nestjs/config": "^2.3.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^10.0.2",
@@ -32,7 +32,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "^2.2.0",
     "@nestjs/swagger": "^6.2.1",
-    "@sendgrid/mail": "^7.7.0",
+    "@sendgrid/mail": "^8.1.5",
     "@types/cache-manager": "^4.0.2",
     "@types/cron": "^2.0.0",
     "amqp-connection-manager": "^4.1.11",
